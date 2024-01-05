@@ -39,7 +39,7 @@ const About = () => {
             <div>
               <FacebookIcon />
             </div>
-            <span>Meta</span>
+            <span>Facebook</span>
           </div>
           <div className="flex items-center gap-1">
             <div>
