@@ -45,7 +45,7 @@ const About = () => {
             <div>
               <InstagramIcon />
             </div>
-            <span>Insta</span>
+            <span>Instagram</span>
           </div>
           <div className="flex items-center gap-1">
             <div>
