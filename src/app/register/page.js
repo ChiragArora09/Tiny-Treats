@@ -44,7 +44,7 @@ const RegisterPage = () => {
                 <input type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)} disabled={creatingUser} />
                 <button disabled={creatingUser} className="mt-8" type="submit">Register</button>
                 <p className="text-center font-thin mt-2 text-gray-400 text-sm">or</p>
-                <button disabled={creatingUser} className="mt-2 flex gap-2 items-center font-thin text-gray-500">
+                <button disabled={creatingUser} className="mt-2 flex gap-2 items-center font-thin text-gray-500" onClick={() => signIn('google', {callbackUrl:'/'})}>
                     <Image src={'/google.png'} alt="google logo" width={22} height={22} />
                     Google
                 </button>
