@@ -26,7 +26,7 @@ const RegisterPage = () => {
                 <p className="text-center font-thin mt-2 text-gray-400 text-sm">or</p>
                 <button className="mt-2 flex gap-2 items-center font-thin text-gray-500">
                     <Image src={'/google.png'} alt="google logo" width={22} height={22} />
-                    Sign up using Google
+                    Sign up using your Google Account
                 </button>
             </form>
         </section>
