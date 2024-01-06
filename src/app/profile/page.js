@@ -52,7 +52,7 @@ const profilePage = () => {
                     <button type='button' className='text-xs px-1 py-0.5 rounded-md'>Change Avatar</button>
                 </div>
                 <form className='grow' onSubmit={handleProfileInfo}>
-                    <input type="text" placeholder='Username' value={session.data.user.name} onChange={e => setUsername(e.target.value)}/>
+                    <input type="text" placeholder='Username' value={username} onChange={e => setUsername(e.target.value)}/>
                     <input type="text" disabled={true} value={session.data.user.email} />
                     <button className='bg-green-500' type='submit'>Save</button>
                 </form>
