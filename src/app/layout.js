@@ -16,8 +16,8 @@ export default function RootLayout({ children }) {
       <body className={roboto.className}>
         <main className='max-w-6xl mx-auto p-4'>
           <AppProvider>
-            <Header />
-            {children}
+              <Header />
+              {children}
           </AppProvider>
         </main>
       </body>

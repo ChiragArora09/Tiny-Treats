@@ -4,7 +4,8 @@ import {useSession, signOut} from 'next-auth/react'
 
 const Header = () => {
   const session = useSession()
-  const status = session.status
+  const status = session?.status
+  console.log(session)
 
   return (
     <header className='flex items-center justify-between'>
@@ -17,9 +18,9 @@ const Header = () => {
         </nav>
         <nav className="flex items-center gap-4 text-gray-500 font-semibold">
           {status === 'authenticated' && (
-            <Button className='bg-primary rounded-full text-white px-6 py-2' onClick={() => signOut()}>Logout</Button>
+            <button className='bg-primary rounded-full text-white px-6 py-2' onClick={() => signOut()}>Logout</button>
           )}
-          {status === 'unauthenticated' && (
+          {status !== 'authenticated' && (
             <>
               <Link href={'/register'} className='bg-primary rounded-full text-white px-6 py-2'>Register</Link>
               <Link href={'/login'}>Login</Link>

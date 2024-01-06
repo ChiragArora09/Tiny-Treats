@@ -1,6 +1,7 @@
 'use client'
 import Image from "next/image"
 import Link from "next/link"
+import {signIn} from "next-auth/react";
 import { useState } from "react"
 
 const RegisterPage = () => {
@@ -31,7 +32,6 @@ const RegisterPage = () => {
                 <div className="my-3 text-sm font-thin text-center">
                     User created successfully! <Link className="text-blue-600 font-medium text-lg underline" href={'/login'}>Login</Link>
                 </div>
-                
             )}
             {error && (
                 <div className="my-3 text-sm text-center text-red-600">
@@ -42,9 +42,9 @@ const RegisterPage = () => {
             <form className="block max-w-md mt-4 mx-auto" onSubmit={handleFormSubmit}>
                 <input type="email" placeholder="email" value={email} onChange={e => setEmail(e.target.value)} disabled={creatingUser} />
                 <input type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)} disabled={creatingUser} />
-                <button disabled={creatingUser} className="mt-8" type="submit">Register</button>
+                <button disabled={creatingUser} className="mt-8 bg-primary text-white" type="button">Register</button>
                 <p className="text-center font-thin mt-2 text-gray-400 text-sm">or</p>
-                <button disabled={creatingUser} className="mt-2 flex gap-2 items-center font-thin text-gray-500" onClick={() => signIn('google', {callbackUrl:'/'})}>
+                <button type="button" disabled={creatingUser} className="mt-2 flex gap-2 items-center font-thin text-gray-500" onClick={() => signIn('google', {callbackUrl:'/'})}>
                     <Image src={'/google.png'} alt="google logo" width={22} height={22} />
                     Google
                 </button>
