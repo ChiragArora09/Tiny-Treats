@@ -5,6 +5,7 @@ import {signIn} from "next-auth/react";
 import { useState } from "react"
 
 const RegisterPage = () => {
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [userCreated, setUserCreated] = useState(false)
@@ -15,7 +16,7 @@ const RegisterPage = () => {
         e.preventDefault()
         setCreatingUser(true)
         setError(false)
-        const response = await fetch('/api/register', {method: 'POST', body: JSON.stringify({email, password}), headers: {'Content-Type': 'application/json'},})
+        const response = await fetch('/api/register', {method: 'POST', body: JSON.stringify({name, email, password}), headers: {'Content-Type': 'application/json'},})
         setCreatingUser(false)
         if(response.ok){
             setUserCreated(true)
@@ -40,9 +41,10 @@ const RegisterPage = () => {
             )}
 
             <form className="block max-w-md mt-4 mx-auto" onSubmit={handleFormSubmit}>
+                <input type="text" placeholder="username" value={name} onChange={e => setName(e.target.value)} disabled={creatingUser} />
                 <input type="email" placeholder="email" value={email} onChange={e => setEmail(e.target.value)} disabled={creatingUser} />
                 <input type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)} disabled={creatingUser} />
-                <button disabled={creatingUser} className="mt-8 bg-primary text-white" type="button">Register</button>
+                <button disabled={creatingUser} className="mt-8 bg-primary text-white" type="submit">Register</button>
                 <p className="text-center font-thin mt-2 text-gray-400 text-sm">or</p>
                 <button type="button" disabled={creatingUser} className="mt-2 flex gap-2 items-center font-thin text-gray-500" onClick={() => signIn('google', {callbackUrl:'/'})}>
                     <Image src={'/google.png'} alt="google logo" width={22} height={22} />

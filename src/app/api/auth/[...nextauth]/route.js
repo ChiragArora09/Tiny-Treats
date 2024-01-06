@@ -27,7 +27,6 @@ export const authOptions = {
           console.log("credentials not found")
           return null
         }
-        console.log(credentials)
         const email = credentials.email;
         const password = credentials.password;
 
