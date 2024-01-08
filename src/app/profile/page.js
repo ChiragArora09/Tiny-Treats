@@ -74,7 +74,10 @@ const profilePage = () => {
                             <div className='text-7xl text-primary'>{session.data.user.email[0]}</div>
                             <div className='h-2 w-2'></div>
                         </div>
-                        <button type='button' className='text-xs px-1 py-0.5 rounded-md'>Change Avatar</button>
+                        <input id='file' type="file" className='hidden' onChange={handleImageChange} />
+                        <label className='cursor-pointer' htmlFor='file'>
+                            <span className='text-black text-xs border border-gray-600 px-1 py-0.5 rounded-md'>Change Avatar</span>
+                        </label>
                         </>
                     )}
                 </div>

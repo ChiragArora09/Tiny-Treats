@@ -8,8 +8,6 @@ export async function PUT(req){
     const data = await req.json()
     const session = await getServerSession(authOptions)
     const email = session.user.email
-    // update username
-    const res = await User.updateOne({email}, {name:data.name})
-
+    await User.updateOne({email}, {name:data.name})
     return Response.json(true)
 }
