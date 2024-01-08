@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 const RegisterPage = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userCreated, setUserCreated] = useState(false);
@@ -17,7 +18,7 @@ const RegisterPage = () => {
     setError(false);
     const response = await fetch("/api/register", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ name, email, password }),
       headers: { "Content-Type": "application/json" },
     });
     setCreatingUser(false);
@@ -50,6 +51,13 @@ const RegisterPage = () => {
       )}
 
       <form className="block max-w-md mt-4 mx-auto" onSubmit={handleFormSubmit}>
+        <input
+          type="text"
+          placeholder="username"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          disabled={creatingUser}
+        />
         <input
           type="email"
           placeholder="email"

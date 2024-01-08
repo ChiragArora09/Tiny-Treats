@@ -9,13 +9,6 @@ const LoginPage = () => {
     const [password, setPassword] = useState('')
     const [loginInProgress, setLoginInProgress] = useState(false)
 
-    // async function handleFormSubmit(e) {
-    //     e.preventDefault()
-    //     setLoginInProgress(true)
-    //     await signIn('credentials', {email, password, callbackUrl: '/'})
-    //     setLoginInProgress(false)
-    //   }
-
   return (
     <section className="my-20 mx-auto bg-white rounded-lg py-12 max-w-lg">
         <h1 className="text-center text-primary text-4xl">Login</h1>
