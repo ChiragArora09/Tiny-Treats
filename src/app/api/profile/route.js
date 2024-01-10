@@ -14,14 +14,14 @@ export async function PUT(req) {
     update.name = data.name;
   }
   if ("image" in data) {
-    update.name = data.image;
+    update.image = data.image;
   }
   if (Object.keys(update).length > 0) {
     await User.updateOne({ email }, update);
   }
 
   // update username
-  // const res = await User.updateOne({email}, {name:data.name})
+  // await User.updateOne({ email }, { name: data.name });
 
   return Response.json(true);
 }

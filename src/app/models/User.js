@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
     image: {
+      data: Buffer,
       type: String,
     },
   },

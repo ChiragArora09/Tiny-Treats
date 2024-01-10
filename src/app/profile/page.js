@@ -3,13 +3,15 @@ import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { Upload } from "@mui/icons-material";
 
 const profilePage = () => {
   const session = useSession();
   console.log(session);
   const [username, setUsername] = useState("");
   const [image, setImage] = useState("");
-  const [saved, setSaved] = useState("");
+  // const [saved, setSaved] = useState("");
   const { status } = session;
 
   useEffect(() => {
@@ -21,28 +23,53 @@ const profilePage = () => {
 
   const handleProfileInfo = async (e) => {
     e.preventDefault();
-    setSaved(false);
-    const res = await fetch("/api/profile", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: username, image }),
+    // setSaved(false);
+    //toast("Saving...");
+    const savingPromise = new Promise(async (resolve, reject) => {
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: username, image }),
+      });
+      if (res.ok) resolve();
+      else reject();
     });
-    if (res.ok) {
-      setSaved(true);
-    }
+    await toast.promise(savingPromise, {
+      loading: "Saving...",
+      success: "Profile saved!",
+      error: "Error",
+    });
   };
+
+  //   if (res.ok) {
+  //     toast.success("Profile saved!");
+  //     // setSaved(true);
+  //   }
+  // };
 
   const handleImageChange = async (e) => {
     const files = e.target.files;
     if (files?.length === 1) {
       const data = new FormData();
       data.set("file", files[0]);
-      const response = await fetch("/api/upload", {
+
+      const uploadPromise = fetch("/api/upload", {
         method: "POST",
         body: data,
+      }).then((response) => {
+        if (response.ok) {
+          return response.json().then((link) => {
+            setImage(link);
+          });
+        }
+        throw new Error("Oops! Something went wrong");
       });
-      const link = await response.json();
-      setImage(link);
+
+      await toast.promise(uploadPromise, {
+        loading: "Uploading...",
+        success: "Upload complete",
+        error: "Upload error",
+      });
     }
   };
 
@@ -58,11 +85,12 @@ const profilePage = () => {
   return (
     <section className="mt-20">
       <h1 className="text-center text-primary text-4xl mb-8">My Account</h1>
-      {saved && (
+      {/* {saved && (
         <h3 className="text-center bg-green-200 p-4 rounded-lg mb-3 text-gray-600">
           Please login again to see updated profile!
         </h3>
-      )}
+      )} */}
+
       <div className="max-w-lg mx-auto border border-gray-200 shadow-lg px-10 py-8 rounded-xl ">
         <div className="flex gap-4 items-center">
           <div className="flex flex-col items-center gap-1">
@@ -119,7 +147,7 @@ const profilePage = () => {
               onChange={(e) => setUsername(e.target.value)}
             />
             <input
-              type="text"
+              type="email"
               disabled={true}
               value={session.data.user.email}
             />
