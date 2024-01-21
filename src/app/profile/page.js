@@ -8,28 +8,43 @@ import { Upload } from "@mui/icons-material";
 
 const profilePage = () => {
   const session = useSession();
-  console.log(session);
   const [username, setUsername] = useState("");
   const [image, setImage] = useState("");
-  // const [saved, setSaved] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+
   const { status } = session;
 
   useEffect(() => {
-    if (status === "authenticated") {
-      setUsername(session.data.user.name);
-      setImage(session.data.user.image);
+    if(status==='authenticated'){
+      setUsername(session.data.user.name)
+      setImage(session.data.user.image)
+      fetch('/api/profile').then(response => {
+        response.json().then(data => {
+          console.log(data)
+          setPhone(data.phone)
+          setPostalCode(data.postalCode)
+          setAddress(data.address)
+          setCity(data.city)
+          setCountry(data.country)
+          setUsername(data.name)
+          setImage(data.image)
+          
+        })
+      })
     }
-  }, [status, session]);
+  }, [session, status])
 
   const handleProfileInfo = async (e) => {
     e.preventDefault();
-    // setSaved(false);
-    //toast("Saving...");
     const savingPromise = new Promise(async (resolve, reject) => {
       const res = await fetch("/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: username, image }),
+        body: JSON.stringify({ name: username, image, address, postalCode, phone, city, country }),
       });
       if (res.ok) resolve();
       else reject();
@@ -40,12 +55,6 @@ const profilePage = () => {
       error: "Error",
     });
   };
-
-  //   if (res.ok) {
-  //     toast.success("Profile saved!");
-  //     // setSaved(true);
-  //   }
-  // };
 
   const handleImageChange = async (e) => {
     const files = e.target.files;
@@ -80,19 +89,11 @@ const profilePage = () => {
     redirect("/login");
   }
 
-  // const userImg = session.data.user.image;
-
   return (
     <section className="mt-20">
       <h1 className="text-center text-primary text-4xl mb-8">My Account</h1>
-      {/* {saved && (
-        <h3 className="text-center bg-green-200 p-4 rounded-lg mb-3 text-gray-600">
-          Please login again to see updated profile!
-        </h3>
-      )} */}
-
-      <div className="max-w-lg mx-auto border border-gray-200 shadow-lg px-10 py-8 rounded-xl ">
-        <div className="flex gap-4 items-center">
+      <div className="max-w-xl mx-auto border border-gray-200 shadow-lg px-10 py-8 rounded-xl ">
+        <div className="flex gap-4">
           <div className="flex flex-col items-center gap-1">
             {image && (
               <>
@@ -151,6 +152,13 @@ const profilePage = () => {
               disabled={true}
               value={session.data.user.email}
             />
+            <input type="tel" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)}/>
+            <input type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)}/>
+            <div className="flex gap-2">
+              <input type="text" placeholder="PinCode" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
+              <input type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} />
+            </div>
+            <input type="text" placeholder="Country" value={country} onChange={(e) => setCountry(e.target.value)} />
             <button className="bg-green-500" type="submit">
               Save
             </button>
