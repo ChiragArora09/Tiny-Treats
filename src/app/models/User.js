@@ -18,21 +18,6 @@ const UserSchema = new mongoose.Schema(
       data: Buffer,
       type: String,
     },
-    phone: {
-      type: String
-    },
-    address: {
-      type: String
-    },
-    postalCode: {
-      type: String
-    },
-    city: {
-      type: String
-    },
-    country: {
-      type: String
-    }
   },
   { timestamps: true }
 );

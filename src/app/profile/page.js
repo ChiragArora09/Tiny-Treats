@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Upload } from "@mui/icons-material";
+import Link from "next/link";
+import UserTabs from "@/components/layout/UserTabs";
 
 const profilePage = () => {
   const session = useSession();
@@ -15,28 +17,30 @@ const profilePage = () => {
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
-
+  const [isAdmin, setIsAdmin] = useState("false");
+  const [profileFetched, setProfileFetched] = useState("false");
   const { status } = session;
 
   useEffect(() => {
-    if(status==='authenticated'){
-      setUsername(session.data.user.name)
-      setImage(session.data.user.image)
-      fetch('/api/profile').then(response => {
-        response.json().then(data => {
-          console.log(data)
-          setPhone(data.phone)
-          setPostalCode(data.postalCode)
-          setAddress(data.address)
-          setCity(data.city)
-          setCountry(data.country)
-          setUsername(data.name)
-          setImage(data.image)
-          
-        })
-      })
+    if (status === "authenticated") {
+      setUsername(session.data.user.name);
+      setImage(session.data.user.image);
+      fetch("/api/profile").then((response) => {
+        response.json().then((data) => {
+          console.log(data);
+          setPhone(data.phone);
+          setPostalCode(data.postalCode);
+          setAddress(data.address);
+          setCity(data.city);
+          setCountry(data.country);
+          setIsAdmin(data.admin);
+          setUsername(data.name);
+          setImage(data.image);
+          setProfileFetched(true);
+        });
+      });
     }
-  }, [session, status])
+  }, [session, status]);
 
   const handleProfileInfo = async (e) => {
     e.preventDefault();
@@ -44,7 +48,15 @@ const profilePage = () => {
       const res = await fetch("/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: username, image, address, postalCode, phone, city, country }),
+        body: JSON.stringify({
+          name: username,
+          image,
+          address,
+          postalCode,
+          phone,
+          city,
+          country,
+        }),
       });
       if (res.ok) resolve();
       else reject();
@@ -82,7 +94,7 @@ const profilePage = () => {
     }
   };
 
-  if (status === "loading") {
+  if (status === "loading" || !profileFetched) {
     return "Loading...";
   }
   if (status === "unauthenticated") {
@@ -91,8 +103,10 @@ const profilePage = () => {
 
   return (
     <section className="mt-20">
-      <h1 className="text-center text-primary text-4xl mb-8">My Account</h1>
-      <div className="max-w-xl mx-auto border border-gray-200 shadow-lg px-10 py-8 rounded-xl ">
+      <UserTabs isAdmin={isAdmin} />
+      {/* <h1 className="text-center text-primary text-4xl mb-8">My Account</h1> */}
+      {/* <div className="max-w-xl mx-auto border border-gray-200 shadow-lg px-10 py-8 rounded-xl "> */}
+      <div className="max-w-md mx-auto mt-8">
         <div className="flex gap-4">
           <div className="flex flex-col items-center gap-1">
             {image && (
@@ -141,24 +155,63 @@ const profilePage = () => {
             )}
           </div>
           <form className="grow" onSubmit={handleProfileInfo}>
+            <label>First & Last name</label>
             <input
               type="text"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
+            <label>Email</label>
             <input
               type="email"
               disabled={true}
               value={session.data.user.email}
+              placeholder={"email"}
             />
-            <input type="tel" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)}/>
-            <input type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)}/>
+            <label>Phone no</label>
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <label>Address</label>
+            <input
+              type="text"
+              placeholder="Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+
             <div className="flex gap-2">
-              <input type="text" placeholder="PinCode" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
-              <input type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} />
+              <div>
+                <label>Pincode</label>
+                <input
+                  type="text"
+                  placeholder="PinCode"
+                  value={postalCode}
+                  onChange={(e) => setPostalCode(e.target.value)}
+                />
+              </div>
             </div>
-            <input type="text" placeholder="Country" value={country} onChange={(e) => setCountry(e.target.value)} />
+            <div>
+              <label>City</label>
+              <input
+                type="text"
+                placeholder="City"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </div>
+
+            <label>Country</label>
+            <input
+              type="text"
+              placeholder="Country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+            />
             <button className="bg-green-500" type="submit">
               Save
             </button>

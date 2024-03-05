@@ -32,7 +32,7 @@ button, .button{
     @apply border border-gray-300 rounded-xl px-6 py-2;
 }
 button[type="submit"], .submit, button.primary{
-    @apply text-white;
+    @apply border-primary bg-primary text-white;
 }
 button[type="submit"]:disabled, .submit:disabled{
     @apply cursor-not-allowed bg-[#c67e56];
@@ -44,6 +44,15 @@ div.tabs > *.active{
     @apply bg-primary text-white;
 }
 
+
 .flying-button-parent button{
     @apply border-primary bg-primary text-white rounded-full;
+}
+
+div.tabs > * {
+    @apply bg-gray-300 text-gray-700 rounded-full py-2 px-4;
+    }
+
+div.tabs > *.active{
+    @apply bg-primary text-white;
 }
