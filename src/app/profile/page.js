@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { Upload } from "@mui/icons-material";
 import Link from "next/link";
 import UserTabs from "@/components/layout/UserTabs";
+import EditingImage from "@/components/layout/EditingImage";
 
 const profilePage = () => {
   const session = useSession();
@@ -68,32 +69,6 @@ const profilePage = () => {
     });
   };
 
-  const handleImageChange = async (e) => {
-    const files = e.target.files;
-    if (files?.length === 1) {
-      const data = new FormData();
-      data.set("file", files[0]);
-
-      const uploadPromise = fetch("/api/upload", {
-        method: "POST",
-        body: data,
-      }).then((response) => {
-        if (response.ok) {
-          return response.json().then((link) => {
-            setImage(link);
-          });
-        }
-        throw new Error("Oops! Something went wrong");
-      });
-
-      await toast.promise(uploadPromise, {
-        loading: "Uploading...",
-        success: "Upload complete",
-        error: "Upload error",
-      });
-    }
-  };
-
   if (status === "loading" || !profileFetched) {
     return "Loading...";
   }
@@ -102,57 +77,14 @@ const profilePage = () => {
   }
 
   return (
-    <section className="mt-20">
+    <section className="mt-10">
       <UserTabs isAdmin={isAdmin} />
-      {/* <h1 className="text-center text-primary text-4xl mb-8">My Account</h1> */}
-      {/* <div className="max-w-xl mx-auto border border-gray-200 shadow-lg px-10 py-8 rounded-xl "> */}
       <div className="max-w-md mx-auto mt-8">
         <div className="flex gap-4">
-          <div className="flex flex-col items-center gap-1">
-            {image && (
-              <>
-                <Image
-                  src={image}
-                  width={100}
-                  height={100}
-                  className="rounded-full"
-                  alt="avatar"
-                />
-                <input
-                  id="file"
-                  type="file"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-                <label className="cursor-pointer" htmlFor="file">
-                  <span className="text-black text-xs border border-gray-600 px-1 py-0.5 rounded-md">
-                    Change Avatar
-                  </span>
-                </label>
-              </>
-            )}
-            {!image && (
-              <>
-                <div className="flex flex-col items-center bg-white justify-center w-20 h-20 rounded-full ">
-                  <div className="text-7xl text-primary">
-                    {session.data.user.email[0]}
-                  </div>
-                  <div className="h-2 w-2"></div>
-                </div>
-
-                <input
-                  id="file"
-                  type="file"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-                <label className="cursor-pointer" htmlFor="file">
-                  <span className="text-black text-xs border border-gray-600 px-1 py-0.5 rounded-md">
-                    Change Avatar
-                  </span>
-                </label>
-              </>
-            )}
+          <div>
+            <div className="p-2 rounded-lg relative max-w-[120px]">
+              <EditingImage link={image} setLink={setImage} />
+            </div>
           </div>
           <form className="grow" onSubmit={handleProfileInfo}>
             <label>First & Last name</label>
